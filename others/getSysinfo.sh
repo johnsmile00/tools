@@ -114,11 +114,25 @@ infofiles() {
 }
 
 portscan() {
-    fun_cmd 'Port Listen' 'ss -an|grep LISTEN|grep tcp'
+    which ss >/dev/null
+    if [ "$?" == "0" ];then
+        fun_cmd 'Port Listen' 'ss -an|grep LISTEN|grep tcp'
+        return
+    fi
+
+    which netstat >/dev/null
+    if [ "$?" == "0" ];then
+        fun_cmd 'Port Listen' 'netstat -an|grep LISTEN|grep tcp'
+        return
+    fi
+}
+
+arpscan() {
+    fun_cmd 'Arp Info' 'arp -an'   
 }
 
 netstatscan() {
-    fun_cmd 'Netstat' 'netstat -anp'
+    fun_cmd 'Netstat' 'netstat -anp|grep -Ev ^unix'
 }
 
 psscan() {
@@ -161,12 +175,13 @@ main() {
     lastlog
     versions
     portscan
+    arpscan
     psscan
     netstatscan
-    findfiles
     finddir
     infofiles
     perm
+    findfiles
     cat $SYSINFOFILE
 }
 # </allMain>
