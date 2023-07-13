@@ -54,7 +54,9 @@ fun_finddir(){
 
 # <Core>
 whois() {
-    echo "[Current User]: $(whoami)" >> $SYSINFOFILE
+    echo "[User]: $(whoami)" >> $SYSINFOFILE
+    echo "[Uptime]:$(uptime)" >> $SYSINFOFILE
+    echo "[Uname]: $(uname -a)" >> $SYSINFOFILE
 }
 
 cpu() {
@@ -62,22 +64,14 @@ cpu() {
     count=$(grep -c processor /proc/cpuinfo)
     model=${model/model name/}
     model=${model/:/}
-    echo "${count}x ${model/model name  : /}" >> $SYSINFOFILE
+    echo "[CPU]: ${count}x ${model/model name  : /}" >> $SYSINFOFILE
 }
 
-space() {
-    echo "" >> $SYSINFOFILE
-    echo "================================[Disk Usage]===================================" >> $SYSINFOFILE
-    df -h >> $SYSINFOFILE
-}
-
-upstart() {
-    echo "[Uptime]:$(uptime)" >> $SYSINFOFILE
+mem() {
+    fun_cmd 'Memory Info' 'free -h'   
 }
 
 os() {
-    echo "[Uname]: $(uname -a)" >> $SYSINFOFILE
-
     fun_catfile '/etc/issue'
     fun_catfile '/proc/version'
     fun_catfile '/etc/os-release'
@@ -91,11 +85,15 @@ versions() {
     echo "bash: $tmp" >> $SYSINFOFILE
     tmp=$(python -V 2>/dev/null)
     echo "python: $tmp" >> $SYSINFOFILE
+    tmp=$(python2 -V 2>/dev/null)
+    echo "python2: $tmp" >> $SYSINFOFILE
+    tmp=$(python3 -V 2>/dev/null)
+    echo "python3: $tmp" >> $SYSINFOFILE
     tmp=$(perl --version 2>/dev/null|grep -E "\(.*\)" -m 1)
     echo "perl: $tmp" >> $SYSINFOFILE
     tmp=$(php --version 2>/dev/null|grep built)
     echo "php: $tmp" >> $SYSINFOFILE
-    tmp=$(java -version 2>/dev/null|grep version)
+    tmp=$(java -version 2>&1 |grep version)
     echo "java: $tmp" >> $SYSINFOFILE
     tmp=$(gcc --version 2>/dev/null|grep gcc)
     echo "gcc: $tmp" >> $SYSINFOFILE
@@ -128,7 +126,23 @@ portscan() {
 }
 
 arpscan() {
-    fun_cmd 'Arp Info' 'arp -an'   
+    fun_cmd 'Arp Info' 'arp -an'
+}
+
+ipinfo() {
+    which ip >/dev/null
+    if [ "$?" == "0" ];then
+        fun_cmd 'Ip Info' 'ip a|grep -v inet6|grep inet'
+        fun_cmd 'Route Info' 'ip route'
+        return
+    fi
+
+    which ifconfig >/dev/null
+    if [ "$?" == "0" ];then
+        fun_cmd 'Ip Info' 'ifconfig|grep -v inet6|grep inet'
+        fun_cmd 'Route Info' 'netstat -r'
+        return
+    fi
 }
 
 netstatscan() {
@@ -168,12 +182,12 @@ perm() {
 main() {
     echo "" > $SYSINFOFILE
     whois
-    upstart
-    os
-    space
     cpu
+    mem
+    os
     lastlog
     versions
+    ipinfo
     portscan
     arpscan
     psscan
