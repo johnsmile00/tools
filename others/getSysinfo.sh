@@ -145,6 +145,10 @@ ipinfo() {
     fi
 }
 
+mountinfo() {
+    fun_cmd 'Mount' 'mount'
+}
+
 netstatscan() {
     fun_cmd 'Netstat' 'netstat -anp|grep -Ev ^unix'
 }
@@ -187,6 +191,7 @@ main() {
     os
     lastlog
     versions
+    mountinfo
     ipinfo
     portscan
     arpscan
