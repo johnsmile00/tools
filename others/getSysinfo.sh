@@ -67,10 +67,6 @@ cpu() {
     echo "[CPU]: ${count}x ${model/model name  : /}" >> $SYSINFOFILE
 }
 
-mem() {
-    fun_cmd 'Memory Info' 'free -h'   
-}
-
 os() {
     fun_catfile '/etc/issue'
     fun_catfile '/proc/version'
@@ -125,10 +121,6 @@ portscan() {
     fi
 }
 
-arpscan() {
-    fun_cmd 'Arp Info' 'arp -an'
-}
-
 ipinfo() {
     which ip >/dev/null
     if [ "$?" == "0" ];then
@@ -145,34 +137,23 @@ ipinfo() {
     fi
 }
 
-mountinfo() {
+cmdInfo() {
+    fun_cmd 'Memory Info' 'free -h'   
+    fun_cmd 'Arp Info' 'arp -an'
     fun_cmd 'Mount' 'mount'
-}
-
-netstatscan() {
     fun_cmd 'Netstat' 'netstat -anp|grep -Ev ^unix'
-}
-
-psscan() {
     fun_cmd 'Process' 'ps -ef'
-}
-
-lastlog() {
     fun_cmd 'Last log' 'last'
 }
 
 findfiles() {
-    fun_findfiles "hisotry" '/root/' '.*_history'
-    fun_findfiles "hisotry" '/home/' '.*_history'
-    fun_findfiles "id_rsa" '/root/' 'id_rsa'
-    fun_findfiles "id_rsa" '/home/' 'id_rsa'
-    fun_findfiles "knownhosts" '/root/' 'known_hosts'
-    fun_findfiles "knownhosts" '/home/' 'known_hosts'
-}
+    homes=$(cat /etc/passwd|grep -v 'nologin'|grep -v 'shutdown'|awk -F: '{print $6}'|sort|uniq)
+    fun_findfiles "hisotry" "$homes" '.*_history'
+    fun_findfiles "knownhosts" "$homes" 'known_hosts'
+    fun_findfiles "id_rsa" "$homes" 'id_rsa'
+    fun_findfiles "authorized_keys" "$homes" 'authorized_keys'
 
-finddir() {
-    fun_finddir ".ssh" '/root/' '.ssh'
-    fun_finddir ".ssh" '/home/' '.ssh'
+    fun_finddir ".ssh" "$homes" '.ssh'
 }
 
 perm() {
@@ -187,17 +168,11 @@ main() {
     echo "" > $SYSINFOFILE
     whois
     cpu
-    mem
     os
-    lastlog
     versions
-    mountinfo
     ipinfo
     portscan
-    arpscan
-    psscan
-    netstatscan
-    finddir
+    cmdInfo
     infofiles
     perm
     findfiles
