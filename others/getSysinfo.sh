@@ -149,6 +149,7 @@ cmdInfo() {
 findfiles() {
     homes=$(cat /etc/passwd|grep -v 'nologin'|grep -v 'shutdown'|awk -F: '{print $6}'|sort|uniq)
     fun_findfiles "hisotry" "$homes" '.*_history'
+    fun_findfiles "viminfo" "$homes" '.viminfo'
     fun_findfiles "knownhosts" "$homes" 'known_hosts'
     fun_findfiles "id_rsa" "$homes" 'id_rsa'
     fun_findfiles "authorized_keys" "$homes" 'authorized_keys'
