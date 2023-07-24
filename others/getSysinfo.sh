@@ -32,7 +32,7 @@ fun_findfiles() {
     do
         echo "" >> $SYSINFOFILE
         echo "=========================$r=========================" >> $SYSINFOFILE
-        cat $r >> $SYSINFOFILE
+        cat $r 2>/dev/null >> $SYSINFOFILE
     done
 }
 
