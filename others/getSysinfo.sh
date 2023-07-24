@@ -175,7 +175,6 @@ main() {
     portscan
     cmdInfo
     infofiles
-    perm
     findfiles
     cat $SYSINFOFILE
 }
