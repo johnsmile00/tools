@@ -25,4 +25,7 @@ if __name__ == '__main__':
     httpd.socket = sslctx.wrap_socket(httpd.socket, server_side=True)
 
     print("Runing https web on %s:%d"%server_address)
-    httpd.serve_forever()
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        exit(0)
