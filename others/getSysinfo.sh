@@ -101,6 +101,7 @@ infofiles() {
     fun_catfile '/etc/hosts'
     fun_catfile '/etc/crontab'
     fun_catfile '/etc/passwd'
+    fun_catfile '/etc/group'
     fun_catfile '/etc/shadow'
     fun_catfile '/etc/sudoers'
     fun_catfile '/etc/ssh/sshd_config'
