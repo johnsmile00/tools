@@ -144,7 +144,7 @@ cmdInfo() {
     fun_cmd 'Mount' 'mount'
     fun_cmd 'Netstat' 'netstat -anp|grep -Ev ^unix'
     fun_cmd 'Process' 'ps -ef'
-    fun_cmd 'Last log' 'last'
+    fun_cmd 'Last log' 'last -w'
 }
 
 findfiles() {
