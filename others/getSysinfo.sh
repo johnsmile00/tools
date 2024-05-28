@@ -57,6 +57,7 @@ whois() {
     echo "[User]: $(whoami)" >> $SYSINFOFILE
     echo "[Uptime]:$(uptime)" >> $SYSINFOFILE
     echo "[Uname]: $(uname -a)" >> $SYSINFOFILE
+    echo "[Hostname]: $(hostname)" >> $SYSINFOFILE
 }
 
 cpu() {
