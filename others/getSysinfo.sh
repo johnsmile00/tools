@@ -153,15 +153,10 @@ findfiles() {
     fun_findfiles "viminfo" "$homes" '.viminfo'
     fun_findfiles "knownhosts" "$homes" 'known_hosts'
     fun_findfiles "id_rsa" "$homes" 'id_rsa'
+    fun_findfiles "id_rsa.pub" "$homes" 'id_rsa.pub'
     fun_findfiles "authorized_keys" "$homes" 'authorized_keys'
 
     fun_finddir ".ssh" "$homes" '.ssh'
-}
-
-perm() {
-    echo "" >> $SYSINFOFILE
-    echo "======================Folders with perm=============================" >> $SYSINFOFILE
-    find / -type d -perm -2 -ls 2>/dev/null|grep -v denied >> $SYSINFOFILE
 }
 # </Core>
 
