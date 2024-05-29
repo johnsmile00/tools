@@ -107,6 +107,7 @@ infofiles() {
     fun_catfile '/etc/sudoers'
     fun_catfile '/etc/ssh/sshd_config'
     fun_catfile '/etc/ldap.conf'
+    fun_catfile '/etc/openldap/ldap.conf'
 }
 
 portscan() {
