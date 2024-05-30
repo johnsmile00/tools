@@ -156,6 +156,8 @@ findfiles() {
     fun_findfiles "knownhosts" "$homes" 'known_hosts'
     fun_findfiles "id_rsa" "$homes" 'id_rsa'
     fun_findfiles "id_rsa.pub" "$homes" 'id_rsa.pub'
+    fun_findfiles "id_dsa" "$homes" 'id_dsa'
+    fun_findfiles "id_dsa.pub" "$homes" 'id_dsa.pub'
     fun_findfiles "authorized_keys" "$homes" 'authorized_keys'
 
     fun_finddir ".ssh" "$homes" '.ssh'
